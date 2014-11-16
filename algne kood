@@ -14,12 +14,21 @@ class Pesa:
         
 class Lind:
     def __init__(self, image, X,Y, speed, direction):
-        self.X = X
-        self.Y = Y
         self.speed = speed
         self.image = image
         self.pos = image.get_rect().move(X, Y)
         self.direction = direction
+        
+    def imagevalik(self):
+        if self.direction == "N":
+            self.image = lind1
+        elif self.direction == "W":
+            self.image = lind2
+        elif self.direction == "E":
+            self.image = lind3
+        elif self.direction == "S":
+            self.image = lind4
+    
     def move(self):
         if self.direction =="E" and self.pos.right<800:
             self.pos = self.pos.move(self.speed,0)
@@ -48,7 +57,9 @@ ekraani_pind.blit(taust, (0, 0))
 pesa = pygame.image.load('pesa.png').convert()
 pesa.set_colorkey(transColor)
 s = Pesa(pesa, 500,140)
+
 linnud = []
+
 for i in range(3):
     a = Lind(random.choice([lind1,lind2,lind3,lind4]), random.choice([10,50,150]), random.choice([100,300,500]), bird_speed, "W")
     linnud.append(a)
@@ -71,6 +82,7 @@ while True:
         elif event.key == k.K_LEFT:
             wind("W")
     for element in linnud:
+        element.imagevalik()
         ekraani_pind.blit(taust, element.pos, element.pos)
         element.move()
         ekraani_pind.blit(element.image, element.pos)

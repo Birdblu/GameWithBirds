@@ -1,0 +1,36 @@
+import pygame
+import random
+pygame.init()
+class Lind:
+    def __init__(self, image, height, speed):
+        self.speed = speed
+        self.image = image
+        self.pos = image.get_rect().move(0, height)
+    def move(self):
+        self.pos = self.pos.move(0, self.speed)
+        if self.pos.right > 600:
+            self.pos.left = 0
+ekraani_pind = pygame.display.set_mode( (800, 600) )
+pygame.display.set_caption("Mäng lindudega")
+lind1 = pygame.image.load("lind.png").convert()
+lind2 = pygame.image.load("lind2.png").convert()
+lind3 = pygame.image.load("lind3.png").convert()
+lind4 = pygame.image.load("lind4.png").convert()
+taust = pygame.image.load("taust.png").convert()
+ekraani_pind.blit(taust, (0, 0))
+linnud = []
+for i in range(3):
+    a = Lind(random.choice([lind1,lind2,lind3,lind4]), random.choice([10,50,150]), random.choice([100,300,500]))
+    linnud.append(a)
+
+while True:
+    event = pygame.event.poll()
+    if event.type == pygame.QUIT:
+        break
+    for element in linnud:
+        ekraani_pind.blit(taust, element.pos, element.pos)
+        element.move()
+        ekraani_pind.blit(element.image, element.pos)
+    pygame.display.update()
+    pygame.time.delay(100)
+pygame.quit()

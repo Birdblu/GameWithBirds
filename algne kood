@@ -5,7 +5,13 @@ pygame.init()
 def wind(direction):
     for i in linnud:
         i.direction =direction
-
+class Pesa:
+    def __init__(self, image, x,y):
+        self.x = x
+        self.y = y
+        self.image = image
+        self.pos = image.get_rect().move(x, y) 
+        
 class Lind:
     def __init__(self, image, X,Y, speed, direction):
         self.X = X
@@ -28,12 +34,20 @@ bird_speed = 3 #lindude kiirus
 
 ekraani_pind = pygame.display.set_mode( (800, 600) )
 pygame.display.set_caption("Mäng lindudega")
-lind1 = pygame.image.load("lind1.png").convert()
+transColor = pygame.Color(255, 255, 255)
+lind1 = pygame.image.load("lind.png").convert()
+lind1.set_colorkey(transColor)
 lind2 = pygame.image.load("lind2.png").convert()
+lind2.set_colorkey(transColor)
 lind3 = pygame.image.load("lind3.png").convert()
+lind3.set_colorkey(transColor)
 lind4 = pygame.image.load("lind4.png").convert()
-taust = pygame.image.load("taust.png").convert()
+lind4.set_colorkey(transColor)
+taust = pygame.image.load("taust.jpg").convert()
 ekraani_pind.blit(taust, (0, 0))
+pesa = pygame.image.load('pesa.png').convert()
+pesa.set_colorkey(transColor)
+s = Pesa(pesa, 500,140)
 linnud = []
 for i in range(3):
     a = Lind(random.choice([lind1,lind2,lind3,lind4]), random.choice([10,50,150]), random.choice([100,300,500]), bird_speed, "W")
@@ -41,6 +55,9 @@ for i in range(3):
 
 k = pygame
 while True:
+    clock = pygame.time.Clock()
+    FRAMES_PER_SECOND = 60
+    deltat = clock.tick(FRAMES_PER_SECOND)
     event = pygame.event.poll()
     if event.type == pygame.QUIT:
         break
@@ -57,6 +74,7 @@ while True:
         ekraani_pind.blit(taust, element.pos, element.pos)
         element.move()
         ekraani_pind.blit(element.image, element.pos)
+        ekraani_pind.blit(s.image, s.pos)
     pygame.display.update()
     pygame.time.delay(100)
 pygame.quit()

@@ -41,7 +41,18 @@ class Lind:
         if self.direction =="W" and self.pos.left>0:
             self.pos = self.pos.move(-1*self.speed,0)
 
-bird_speed = 3 #lindude kiirus
+def servatest(kontrollitavad,W,H,remover=[]):
+    for i in kontrollitavad:
+        if i.x<0 or i.x+100>=W or i.y<0 or i.y+100>=H:
+            remover.append(i)
+    
+    for j in remover:
+        try:
+            kontrollitavad.remove(j)
+        except: continue
+    return kontrollitavad
+    
+#bird_speed = 3 #lindude kiirus
 
 ekraani_pind = pygame.display.set_mode( (800, 600) )
 pygame.display.set_caption("Mäng lindudega")
@@ -116,7 +127,7 @@ def paigutaja(obj_arv, sobiv_ala,pildid,keelatud_ala =[]):#sobiv_ala =[[xmin,xma
     if obj_arv >1:
         paigutaja(obj_arv-1,sobiv_ala,pildid,keelatud_ala)
 ####
-paigutaja(3,[[0,700],[0,600]],[lind1,lind2,lind3,lind4],[s])#3 lindu, s-Pesa
+paigutaja(3,[[1,699],[1,599]],[lind1,lind2,lind3,lind4],[s])#3 lindu, s-Pesa
 
 
 
@@ -137,12 +148,14 @@ while True:
             wind("E")
         elif event.key == k.K_LEFT:
             wind("W")
+    ekraani_pind.blit(taust, (0, 0)) #Tähtis
     for element in linnud:
         element.imagevalik()
         ekraani_pind.blit(taust, element.pos, element.pos)
         element.move()
         ekraani_pind.blit(element.image, element.pos)
         ekraani_pind.blit(s.image, s.pos)
+    linnud = servatest(linnud,801,601)
     pygame.display.update()
     pygame.time.delay(100)
 pygame.quit()

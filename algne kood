@@ -66,7 +66,7 @@ linnud = []
     a = Lind(random.choice([lind1,lind2,lind3,lind4]), random.choice([10,50,150]), random.choice([100,300,500]), bird_speed, "W")
     linnud.append(a)"""
 
-def paigutaja(obj_arv, sobiv_ala,pildid,keelatud_ala =[]):#sobiv_ala =[[x for x in range(0,600)],[y for y in range(0,400)]]
+def paigutaja(obj_arv, sobiv_ala,pildid,keelatud_ala =[]):#sobiv_ala =[[xmin,xmax],[ymin,ymax]]
     ##Sobiv ala tuleb arvestada pildi suurusega
     global linnud
     ### x ja y paigutus
@@ -83,7 +83,6 @@ def paigutaja(obj_arv, sobiv_ala,pildid,keelatud_ala =[]):#sobiv_ala =[[x for x 
                 if R.colliderect(L):
                     continue
         break
-    ### suuna valik - valmis
     if x < 50:
         if y<100:
             suund = "S"
@@ -107,7 +106,7 @@ def paigutaja(obj_arv, sobiv_ala,pildid,keelatud_ala =[]):#sobiv_ala =[[x for x 
         else:
             suund = random.choice(["W","N"])
     
-    bird_speed = 3
+    bird_speed = random.randint(3,5)
     print(3)
     ### Linnu loomine
     pilt = random.choice(pildid)

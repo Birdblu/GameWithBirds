@@ -14,6 +14,8 @@ class Pesa:
         
 class Lind:
     def __init__(self, image, X,Y, speed, direction):
+        self.x = X
+        self.y = Y
         self.speed = speed
         self.image = image
         self.pos = image.get_rect().move(X, Y)
@@ -59,10 +61,65 @@ pesa.set_colorkey(transColor)
 s = Pesa(pesa, 500,140)
 
 linnud = []
-
-for i in range(3):
+###
+"""for i in range(3):
     a = Lind(random.choice([lind1,lind2,lind3,lind4]), random.choice([10,50,150]), random.choice([100,300,500]), bird_speed, "W")
-    linnud.append(a)
+    linnud.append(a)"""
+
+def paigutaja(obj_arv, sobiv_ala,pildid,keelatud_ala =[]):#sobiv_ala =[[x for x in range(0,600)],[y for y in range(0,400)]]
+    ##Sobiv ala tuleb arvestada pildi suurusega
+    global linnud
+    ### x ja y paigutus
+    while obj_arv>0:
+        x = random.randint(sobiv_ala[0][0],sobiv_ala[0][1])
+        y = random.randint(sobiv_ala[1][0],sobiv_ala[1][1])
+        R = pygame.Rect(x,y,100,100)
+        for i in keelatud_ala:
+            if type(i)== "pygame.Rect":
+                if R.colliderect(i):
+                    continue
+            else:
+                L = pygame.Rect(i.x,i.y,100,100)
+                if R.colliderect(L):
+                    continue
+        break
+    ### suuna valik - valmis
+    if x < 50:
+        if y<100:
+            suund = "S"
+        elif y>=100 and y< (sobiv_ala[1][1]- (sobiv_ala[1][1]/8)):
+            suund = "E"
+        else:
+            suund = random.choice(["E","N"])
+            
+    if x>=50 and x < (sobiv_ala[0][1]-(sobiv_ala[0][1]/8)):
+        if y<100:
+            suund = "S"
+        elif y>=100 and y< (sobiv_ala[1][1]- (sobiv_ala[1][1]/8) ):
+            suund = random.choice(["E","W","S"])
+        else:
+            suund = random.choice(["E","W","N"])
+    else:
+        if y<100:
+            suund = random.choice(["W","S"])
+        elif y>=100 and y< (sobiv_ala[1][1]- (sobiv_ala[1][1]/8)):
+            suund = random.choice(["W","N","S"])
+        else:
+            suund = random.choice(["W","N"])
+    
+    bird_speed = 3
+    print(3)
+    ### Linnu loomine
+    pilt = random.choice(pildid)
+    print(pilt,x,y,bird_speed,suund)
+    linnud.append(Lind(pilt,x,y,bird_speed,suund))
+    keelatud_ala.append(R)
+    if obj_arv >1:
+        paigutaja(obj_arv-1,sobiv_ala,pildid,keelatud_ala)
+####
+paigutaja(3,[[0,700],[0,600]],[lind1,lind2,lind3,lind4],[s])#3 lindu, s-Pesa
+
+
 
 k = pygame
 while True:

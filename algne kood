@@ -54,6 +54,7 @@ def servatest(kontrollitavad,W,H,remover=[]):
         try:
             kontrollitavad.remove(j)
         except: continue
+    del remover
     return kontrollitavad
     
 #bird_speed = 3 #lindude kiirus
@@ -130,6 +131,7 @@ def paigutaja(obj_arv, sobiv_ala,pildid,keelatud_ala =[]):#sobiv_ala =[[xmin,xma
     keelatud_ala.append(R)
     if obj_arv >1:
         paigutaja(obj_arv-1,sobiv_ala,pildid,keelatud_ala)
+    del keelatud_ala, sobiv_ala
 ####
 paigutaja(3,[[1,699],[1,599]],[lind1,lind2,lind3,lind4],[s])#3 lindu, s-Pesa
 

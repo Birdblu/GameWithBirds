@@ -34,12 +34,16 @@ class Lind:
     def move(self):
         if self.direction =="E" and self.pos.right<800:
             self.pos = self.pos.move(self.speed,0)
+            self.x += self.speed
         if self.direction =="N" and self.pos.right<800:
             self.pos = self.pos.move(0,-self.speed)
+            self.y -= self.speed
         if self.direction =="S" and self.pos.right<800:
             self.pos = self.pos.move(0,self.speed)
+            self.y +=self.speed
         if self.direction =="W" and self.pos.left>0:
             self.pos = self.pos.move(-1*self.speed,0)
+            self.x -= self.speed
 
 def servatest(kontrollitavad,W,H,remover=[]):
     for i in kontrollitavad:

@@ -1,17 +1,36 @@
-import pygame
+import os, pygame
+from pygame.locals import *
 import random
 pygame.init()
 
+def img(name, colorkey=None):
+    image = pygame.image.load(name)
+    image = image.convert()
+    image.set_colorkey(transColor, RLEACCEL)
+    return image, image.get_rect()
+    
 def wind(direction):
     for i in linnud:
         i.direction =direction
 
-class Jahimees:
-    def __init__(self,image,x,y):
-        self.x = x
-        self.y = y
-        self.image = image
-        self.pos = image.get_rect().move(x, y)
+class Jahimees(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image, self.rect = img("jahimees.png", -1)
+        screen = pygame.display.get_surface()
+        self.area = screen.get_rect()
+        self.move = 5
+
+    def liikumine(self):
+        pos = self.rect.move((self.move, 0))
+        if self.rect.left < self.area.left or self.rect.right > self.area.right:
+            self.move = -self.move
+            pos = self.rect.move((self.move, random.choice([10,20,30,50,90,-10,-30])))
+            self.image = pygame.transform.flip(self.image, 1, 0)
+        self.rect = pos
+
+    
+        
 
 class Pesa:
     def __init__(self, image, x,y):
@@ -78,14 +97,13 @@ lind3 = pygame.image.load("lind3.png").convert()
 lind3.set_colorkey(transColor)
 lind4 = pygame.image.load("lind4.png").convert()
 lind4.set_colorkey(transColor)
-jahimees = pygame.image.load("jahimees.png").convert()
-jahimees.set_colorkey(transColor)
 taust = pygame.image.load("taust.jpg").convert()
 ekraani_pind.blit(taust, (0, 0))
 pesa = pygame.image.load('pesa.png').convert()
 pesa.set_colorkey(transColor)
 s = Pesa(pesa, 500,140)
-j = Jahimees(jahimees, 300, 300)
+j = Jahimees()
+sprites = pygame.sprite.Group((j))
 
 linnud = []
 ###
@@ -145,7 +163,7 @@ def paigutaja(obj_arv, sobiv_ala,pildid,keelatud_ala =[]):#sobiv_ala =[[xmin,xma
         paigutaja(obj_arv-1,sobiv_ala,pildid,keelatud_ala)
     del keelatud_ala, sobiv_ala
 ####
-paigutaja(3,[[1,699],[1,599]],[lind1,lind2,lind3,lind4],[s,j])#3 lindu, s-Pesa
+paigutaja(3,[[1,699],[1,599]],[lind1,lind2,lind3,lind4],[s])#3 lindu, s-Pesa
 
 
 
@@ -166,21 +184,24 @@ while True:
             wind("E")
         elif event.key == k.K_LEFT:
             wind("W")
+    j.liikumine()
             
     ekraani_pind.blit(taust, (0, 0)) #Tähtis
-    ekraani_pind.blit(j.image, j.pos)
+    sprites.draw(ekraani_pind)
     ekraani_pind.blit(s.image, s.pos)
     
     for element in linnud:
         element.imagevalik()
         element.move()
         ekraani_pind.blit(element.image, element.pos)
-        if j.pos.colliderect(element.pos):
+        if j.rect.colliderect(element.pos):
             linnud.remove(element)
+       
         if s.pos.colliderect(element.pos):
             linnud.remove(element)
-            paigutaja(1,[[1,699],[1,599]],[lind1,lind2,lind3,lind4],[s,j])
+            paigutaja(1,[[1,699],[1,599]],[lind1,lind2,lind3,lind4],[s])
     linnud = servatest(linnud,801,601)
+    sprites.update()
     pygame.display.update()
     pygame.time.delay(100)
 pygame.quit()

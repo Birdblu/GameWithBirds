@@ -101,6 +101,7 @@ def paigutaja(obj_arv, sobiv_ala,pildid,keelatud_ala =[]):#sobiv_ala =[[xmin,xma
         x = random.randint(sobiv_ala[0][0],sobiv_ala[0][1])
         y = random.randint(sobiv_ala[1][0],sobiv_ala[1][1])
         R = pygame.Rect(x,y,100,100)
+
         for i in keelatud_ala:
             if type(i)== "pygame.Rect":
                 if R.colliderect(i):
@@ -176,6 +177,9 @@ while True:
         ekraani_pind.blit(element.image, element.pos)
         if j.pos.colliderect(element.pos):
             linnud.remove(element)
+        if s.pos.colliderect(element.pos):
+            linnud.remove(element)
+            paigutaja(1,[[1,699],[1,599]],[lind1,lind2,lind3,lind4],[s,j])
     linnud = servatest(linnud,801,601)
     pygame.display.update()
     pygame.time.delay(100)

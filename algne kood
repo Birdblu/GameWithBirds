@@ -124,6 +124,8 @@ def servatest(kontrollitavad,W,H,remover=[]):
     for j in remover:
         try:
             kontrollitavad.remove(j)
+            if kontrollitavad == []:
+                msgSurface('Game over', red)                
         except: continue
     del remover
     return kontrollitavad

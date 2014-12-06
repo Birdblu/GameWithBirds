@@ -1,5 +1,6 @@
 import pygame, sys
 from pygame.locals import *
+from time import *
 import random
 pygame.init()
 
@@ -31,11 +32,11 @@ def msgSurface(text, textColor):
 
     titleTextSurf, titleTextRect = makeTextObjs(text, largeText, textColor)
     titleTextRect.center = (int(800/2),int(586/2))
-    ekraani_pind.blit(titleTextSurf, titleTextRect)
+    screen.blit(titleTextSurf, titleTextRect)
 
     typTextSurf, typTextRect = makeTextObjs('Press key to continue', Text, white)
     typTextRect.center = (int(800/2),int(586/2) + 120)
-    ekraani_pind.blit(typTextSurf, typTextRect)
+    screen.blit(typTextSurf, typTextRect)
     pygame.display.update()
 
     while Activity() == None:
@@ -48,24 +49,24 @@ def msgSurface(text, textColor):
 def PointsCounter(text, textCol):
     Text = pygame.font.Font('freesansbold.ttf', 20)
     titleTextSurf, titleTextRect = makeTextObjs('Points: ' + str(text),pygame.font.Font('freesansbold.ttf', 20), textCol)
-    ekraani_pind.blit(titleTextSurf, titleTextRect)
+    screen.blit(titleTextSurf, titleTextRect)
 
     
     
 
 def wind(direction):
-    for i in linnud:
+    for i in birds:
         i.direction =direction
 
-class Jahimees(pygame.sprite.Sprite):
+class Hunter(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image, self.rect = img("jahimees.png", -1)
+        self.image, self.rect = img("hunter.png", -1)
         screen = pygame.display.get_surface()
         self.area = screen.get_rect()
         self.move = 10
 
-    def liikumine(self):
+    def movement(self):
         pos = self.rect.move((self.move, 0))
         if self.rect.left < self.area.left or self.rect.right > self.area.right:
             self.move = -self.move
@@ -76,14 +77,14 @@ class Jahimees(pygame.sprite.Sprite):
     
         
 
-class Pesa:
+class Nest:
     def __init__(self, image, x,y):
         self.x = x
         self.y = y
         self.image = image
         self.pos = image.get_rect().move(x, y) 
         
-class Lind:
+class Bird:
     def __init__(self, image, X,Y, speed, direction):
         self.x = X
         self.y = Y
@@ -92,15 +93,15 @@ class Lind:
         self.pos = image.get_rect().move(X, Y)
         self.direction = direction
         
-    def imagevalik(self):
+    def ImgChoice(self):
         if self.direction == "N":
-            self.image = lind1
+            self.image = bird1
         elif self.direction == "W":
-            self.image = lind2
+            self.image = bird2
         elif self.direction == "E":
-            self.image = lind3
+            self.image = bird3
         elif self.direction == "S":
-            self.image = lind4
+            self.image = bird4
     
     def move(self):
         if self.direction =="E" and self.pos.right<800:
@@ -116,59 +117,57 @@ class Lind:
             self.pos = self.pos.move(-1*self.speed,0)
             self.x -= self.speed
 
-def servatest(kontrollitavad,W,H,remover=[]):
-    for i in kontrollitavad:
+def EdgeTest(NaughtyBirds,W,H,remover=[]):
+    for i in NaughtyBirds:
         if i.x<0 or i.x+50>=W or i.y<0 or i.y+50>=H:
             remover.append(i)
     
     for j in remover:
         try:
-            kontrollitavad.remove(j)
-            if kontrollitavad == []:
+            NaughtyBirds.remove(j)
+            if NaughtyBirds == []:
                 msgSurface('Game over', red)                
         except: continue
     del remover
-    return kontrollitavad
+    return NaughtyBirds
     
-#bird_speed = 3 #lindude kiirus
+#bird_speed = 3 #bird speed
 
-ekraani_pind = pygame.display.set_mode( (800, 586) )
-pygame.display.set_caption("Mäng lindudega")
+screen = pygame.display.set_mode( (800, 586) )
+pygame.display.set_caption("Bird Game")
 transColor = pygame.Color(255, 255, 255)
-lind1 = pygame.image.load("lind.png").convert()
-lind1.set_colorkey(transColor)
-lind2 = pygame.image.load("lind2.png").convert()
-lind2.set_colorkey(transColor)
-lind3 = pygame.image.load("lind3.png").convert()
-lind3.set_colorkey(transColor)
-lind4 = pygame.image.load("lind4.png").convert()
-lind4.set_colorkey(transColor)
-taust = pygame.image.load("taust.jpg").convert()
-ekraani_pind.blit(taust, (0, 0))
-pesa = pygame.image.load('pesa.png').convert()
-pesa.set_colorkey(transColor)
-s = Pesa(pesa, 500,140)
-j = Jahimees()
-sprites = pygame.sprite.Group((j))
+bird1 = pygame.image.load("bird.png").convert()
+bird1.set_colorkey(transColor)
+bird2 = pygame.image.load("bird2.png").convert()
+bird2.set_colorkey(transColor)
+bird3 = pygame.image.load("bird3.png").convert()
+bird3.set_colorkey(transColor)
+bird4 = pygame.image.load("bird4.png").convert()
+bird4.set_colorkey(transColor)
+background = pygame.image.load("background.jpg").convert()
+screen.blit(background, (0, 0))
+nest = pygame.image.load('nest.png').convert()
+nest.set_colorkey(transColor)
+s = Nest(nest, 500,140)
+hunter = Hunter()
+sprites = pygame.sprite.Group(hunter)
 
-linnud = []
+birds = []
 ###
 """for i in range(3):
-    a = Lind(random.choice([lind1,lind2,lind3,lind4]), random.choice([10,50,150]), random.choice([100,300,500]), bird_speed, "W")
-    linnud.append(a)"""
+    a = Bird(random.choice([bird1,bird2,bird3,bird4]), random.choice([10,50,150]), random.choice([100,300,500]), bird_speed, "W")
+    birds.append(a)"""
 
-def paigutaja(obj_arv, sobiv_ala,pildid,keelatud_ala =[]):#sobiv_ala =[[xmin,xmax],[ymin,ymax]]
+def ObjPosition(ObjAmount, NotOffLimitsArea,pictures,OffLimits =[]):#NotOffLimitsArea =[[xmin,xmax],[ymin,ymax]]
     ##Sobiv ala tuleb arvestada pildi suurusega
-    global linnud
+    global birds
     ### x ja y paigutus
-    while obj_arv>0:
-        x = random.randint(sobiv_ala[0][0],sobiv_ala[0][1])
-        y = random.randint(sobiv_ala[1][0],sobiv_ala[1][1])
+    while ObjAmount>0:
+        x = random.randint(NotOffLimitsArea[0][0],NotOffLimitsArea[0][1])
+        y = random.randint(NotOffLimitsArea[1][0],NotOffLimitsArea[1][1])
         R = pygame.Rect(x,y,100,100)
-        for li in linnud:
-            if not(abs(x- li.x)<600) and (abs(y -li.y)<400):#Controls that birds don't spawn too far
-                continue
-        for i in keelatud_ala:
+
+        for i in OffLimits:
             if type(i)== "pygame.Rect":
                 if R.colliderect(i):
                     continue
@@ -179,39 +178,39 @@ def paigutaja(obj_arv, sobiv_ala,pildid,keelatud_ala =[]):#sobiv_ala =[[xmin,xma
         break
     if x < 50:
         if y<100:
-            suund = "S"
-        elif y>=100 and y< (sobiv_ala[1][1]- (sobiv_ala[1][1]/8)):
-            suund = "E"
+            BirdDirection = "S"
+        elif y>=100 and y< (NotOffLimitsArea[1][1]- (NotOffLimitsArea[1][1]/8)):
+            BirdDirection = "E"
         else:
-            suund = random.choice(["E","N"])
+            BirdDirection = random.choice(["E","N"])
             
-    if x>=50 and x < (sobiv_ala[0][1]-(sobiv_ala[0][1]/8)):
+    if x>=50 and x < (NotOffLimitsArea[0][1]-(NotOffLimitsArea[0][1]/8)):
         if y<100:
-            suund = "S"
-        elif y>=100 and y< (sobiv_ala[1][1]- (sobiv_ala[1][1]/8) ):
-            suund = random.choice(["E","W","S"])
+            BirdDirection = "S"
+        elif y>=100 and y< (NotOffLimitsArea[1][1]- (NotOffLimitsArea[1][1]/8) ):
+            BirdDirection = random.choice(["E","W","S"])
         else:
-            suund = random.choice(["E","W","N"])
+            BirdDirection = random.choice(["E","W","N"])
     else:
         if y<100:
-            suund = random.choice(["W","S"])
-        elif y>=100 and y< (sobiv_ala[1][1]- (sobiv_ala[1][1]/8)):
-            suund = random.choice(["W","N","S"])
+            BirdDirection = random.choice(["W","S"])
+        elif y>=100 and y< (NotOffLimitsArea[1][1]- (NotOffLimitsArea[1][1]/8)):
+            BirdDirection = random.choice(["W","N","S"])
         else:
-            suund = random.choice(["W","N"])
+            BirdDirection = random.choice(["W","N"])
     
     bird_speed = random.randint(3,5)
-    
+    print(3)
     ### Linnu loomine
-    pilt = random.choice(pildid)
-    #print(pilt,x,y,bird_speed,suund)
-    linnud.append(Lind(pilt,x,y,bird_speed,suund))
-    keelatud_ala.append(R)
-    if obj_arv >1:
-        paigutaja(obj_arv-1,sobiv_ala,pildid,keelatud_ala)
-    del keelatud_ala, sobiv_ala
+    picture = random.choice(pictures)
+    print(picture,x,y,bird_speed,BirdDirection)
+    birds.append(Bird(picture,x,y,bird_speed,BirdDirection))
+    OffLimits.append(R)
+    if ObjAmount >1:
+        ObjPosition(ObjAmount-1,NotOffLimitsArea,pictures,OffLimits)
+    del OffLimits, NotOffLimitsArea
 ####
-paigutaja(3,[[1,699],[1,599]],[lind1,lind2,lind3,lind4],[s])#3 lindu, s-Pesa
+ObjPosition(3,[[1,799],[1,585]],[bird1,bird2,bird3,bird4],[s])#3 bird, s-nest
 
 
 
@@ -219,9 +218,10 @@ k = pygame
 counter = 0
 while True:
     clock = pygame.time.Clock()
-    FRAMES_PER_SECOND = 60
-    deltat = clock.tick(FRAMES_PER_SECOND)
+    FPS = 60
+    deltat = clock.tick(FPS)
     event = pygame.event.poll()
+
     if event.type == pygame.QUIT:
         break
     if event.type == pygame.KEYDOWN:
@@ -233,28 +233,29 @@ while True:
             wind("E")
         elif event.key == k.K_LEFT:
             wind("W")
-    j.liikumine()
+
+    hunter.movement()
             
-    ekraani_pind.blit(taust, (0, 0)) #Tähtis
-    sprites.draw(ekraani_pind)
-    ekraani_pind.blit(s.image, s.pos)
+    screen.blit(background, (0, 0)) #Tähtis
+    sprites.draw(screen)
+    screen.blit(s.image, s.pos)
     
-    for element in linnud:
-        element.imagevalik()
+    for element in birds:
+        element.ImgChoice()
         element.move()
-        ekraani_pind.blit(element.image, element.pos)
-        if j.rect.colliderect(element.pos):
-            linnud.remove(element)
+        screen.blit(element.image, element.pos)
+        if hunter.rect.colliderect(element.pos):
+            birds.remove(element)
        
         if s.pos.colliderect(element.pos):
-            linnud.remove(element)
-            paigutaja(1,[[1,699],[1,599]],[lind1,lind2,lind3,lind4],[s])
+            birds.remove(element)
+            ObjPosition(1,[[1,799],[1,585]],[bird1,bird2,bird3,bird4],[s])
             counter += 1
-        if linnud == []:
+        if birds == []:
             msgSurface('Game over', red)
     PointsCounter(counter, white)
 
-    linnud = servatest(linnud,801,601)
+    birds = EdgeTest(birds,801,587)
     sprites.update()
     pygame.display.update()
     pygame.time.delay(100)

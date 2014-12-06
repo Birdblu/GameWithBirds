@@ -79,9 +79,13 @@ class Hunter(pygame.sprite.Sprite):
             self.image = pygame.transform.flip(self.image, 1, 0)
         self.rect = pos
 
+class Tree:
+    def __init__(self, image, x,y):
+        self.x = x
+        self.y = y
+        self.image = image
+        self.pos = image.get_rect().move(x, y) 
     
-        
-
 class Nest:
     def __init__(self, image, x,y):
         self.x = x
@@ -153,7 +157,17 @@ background = pygame.image.load("background.jpg").convert()
 screen.blit(background, (0, 0))
 nest = pygame.image.load('nest.png').convert()
 nest.set_colorkey(transColor)
-s = Nest(nest, 500,140)
+tree1 = pygame.image.load("tree1.png").convert()
+tree1.set_colorkey(transColor)
+tree2 = pygame.image.load("tree2.png").convert()
+tree2.set_colorkey(transColor)
+tree3 = pygame.image.load("tree3.png").convert()
+tree3.set_colorkey(transColor)
+
+FirstTree = Tree(tree1, 500,120)
+SecondTree = Tree(tree2, 70,120)
+ThirdTree = Tree(tree3, 300,325)
+s = Nest(nest, 550,140)
 hunter = Hunter()
 sprites = pygame.sprite.Group(hunter)
 
@@ -243,14 +257,20 @@ while True:
             
     screen.blit(background, (0, 0)) #Tähtis
     sprites.draw(screen)
+    screen.blit(FirstTree.image, FirstTree.pos)
+    screen.blit(SecondTree.image, SecondTree.pos)
+    screen.blit(ThirdTree.image, ThirdTree.pos)
     screen.blit(s.image, s.pos)
     
     for element in birds:
         element.ImgChoice()
         element.move()
         screen.blit(element.image, element.pos)
-        if hunter.rect.colliderect(element.pos):
-            birds.remove(element)
+        if hunter.rect.colliderect(element.pos):  #The birds are safe above the tree/on the tree
+            if not FirstTree.pos.colliderect(element.pos):
+                if not SecondTree.pos.colliderect(element.pos):
+                    if not ThirdTree.pos.colliderect(element.pos):
+                        birds.remove(element)
        
         if s.pos.colliderect(element.pos):
             birds.remove(element)

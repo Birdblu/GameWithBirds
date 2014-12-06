@@ -1,6 +1,6 @@
 import pygame, sys
 from pygame.locals import *
-from time import *
+from decimal import *
 import random
 pygame.init()
 pygame.mixer.init()
@@ -55,8 +55,12 @@ def PointsCounter(text, textCol):
     titleTextSurf, titleTextRect = makeTextObjs('Points: ' + str(text),pygame.font.Font('freesansbold.ttf', 20), textCol)
     screen.blit(titleTextSurf, titleTextRect)
 
-    
-    
+def TimeCounter(text, textCol):
+    Text = pygame.font.Font('freesansbold.ttf', 20)
+    titleTextSurf, titleTextRect = makeTextObjs('Time left: ' + str(text),pygame.font.Font('freesansbold.ttf', 20), textCol)
+    titleTextRect.center = (int(720),int(10))
+    screen.blit(titleTextSurf, titleTextRect)
+                                    
 
 def wind(direction):
     for i in birds:
@@ -235,8 +239,8 @@ def ObjPosition(ObjAmount, NotOffLimitsArea,pictures,OffLimits =[]):#NotOffLimit
 ####
 ObjPosition(3,[[1,799],[1,585]],[bird1,bird2,bird3,bird4],[s])#3 bird, s-nest
 
-
-
+getcontext().prec = 3
+timeCounter = 15
 k = pygame
 counter = 0
 while True:
@@ -258,6 +262,7 @@ while True:
             wind("W")
 
     hunter.movement()
+    timeCounter = Decimal(timeCounter - Decimal(1/10))
             
     screen.blit(background, (0, 0)) #Tähtis
     sprites.draw(screen)
@@ -281,8 +286,17 @@ while True:
             birds.remove(element)
             ObjPosition(1,[[1,799],[1,585]],[bird1,bird2,bird3,bird4],[s])
             counter += 1
+            timeCounter = 13
         if birds == []:
             msgSurface('Game over', red)
+            
+    if timeCounter > 5:
+        TimeCounter(timeCounter, white)
+    else:
+        TimeCounter(timeCounter, red)
+    if timeCounter <= 0:
+        msgSurface('Game over', red)
+        
     PointsCounter(counter, white)
 
     birds = EdgeTest(birds,801,587)

@@ -70,7 +70,12 @@ class Hunter(pygame.sprite.Sprite):
         pos = self.rect.move((self.move, 0))
         if self.rect.left < self.area.left or self.rect.right > self.area.right:
             self.move = -self.move
-            pos = self.rect.move((self.move, random.choice([10,20,30,50,90,-10,-30])))
+            if self.rect.y >= 486:
+                pos = sef.rect.move((self.move, -20))
+            elif self.rect.y <= 100:
+                pos = self.rect.move((self.move, 20))
+            else:
+                pos = self.rect.move((self.move, random.choice([10,20,30,50,90,-10,-30])))
             self.image = pygame.transform.flip(self.image, 1, 0)
         self.rect = pos
 

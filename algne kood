@@ -3,7 +3,9 @@ from pygame.locals import *
 from time import *
 import random
 pygame.init()
+pygame.mixer.init()
 
+got_shot = pygame.mixer.Sound("got_shot.ogg")
 red = (175,0,0)
 white = (255,255,255)
 def Activity():
@@ -271,6 +273,7 @@ while True:
                 if not SecondTree.pos.colliderect(element.pos):
                     if not ThirdTree.pos.colliderect(element.pos):
                         birds.remove(element)
+                        got_shot.play()
        
         if s.pos.colliderect(element.pos):
             birds.remove(element)
@@ -285,3 +288,4 @@ while True:
     pygame.display.update()
     pygame.time.delay(100)
 pygame.quit()
+pygame.mixer.quit()

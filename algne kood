@@ -277,12 +277,13 @@ def ObjPosition(ObjAmount, NotOffLimitsArea,pictures,OffLimits =[]):#NotOffLimit
         ObjPosition(ObjAmount-1,NotOffLimitsArea,pictures,OffLimits)
     del OffLimits, NotOffLimitsArea
 ####
-ObjPosition(3,[[1,799],[1,585]],[bird1,bird2,bird3,bird4],[s])#3 bird, s-nest
+
 
 clock = pygame.time.Clock()
 FPS = 60
 
 def game_loop():
+    ObjPosition(3,[[1,799],[1,585]],[bird1,bird2,bird3,bird4],[s])#3 bird, s-nest
     getcontext().prec = 3
     timeCounter = 15
     k = pygame

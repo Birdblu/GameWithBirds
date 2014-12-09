@@ -62,6 +62,8 @@ def intro_screen():
             
 def Game_over():
     msgSurface('Game over', red)
+    global bird_speed
+    bird_speed = random.randint(3,5)
     pygame.time.delay(1000)
     intro_screen()
     

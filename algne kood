@@ -184,7 +184,7 @@ def EdgeTest(NaughtyBirds,W,H,remover=[]):
 
                 
         except: continue
-    del remover
+    remover[:] = []
     return NaughtyBirds
     
 #bird_speed = 3 #bird speed

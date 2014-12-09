@@ -57,18 +57,14 @@ def intro_screen():
         
 
         pygame.display.update()
-        clock.tick(15)
+        clock.tick(60)
         
             
-def Activity():
-    for event in pygame.event.get((KEYDOWN, KEYUP, QUIT)):
-        if event.type == QUIT:
-            pygame.quit()
-            sys.exit()
-        elif event.type == KEYDOWN:
-            continue
-        return event.key
-    return None
+def Game_over():
+    msgSurface('Game over', red)
+    pygame.time.delay(1000)
+    intro_screen()
+    
 
 def makeTextObjs(text, font, tcolor):
     textSurface = font.render(text, True, tcolor)
@@ -87,18 +83,8 @@ def msgSurface(text, textColor):
     titleTextSurf, titleTextRect = makeTextObjs(text, largeText, textColor)
     titleTextRect.center = (int(800/2),int(586/2))
     screen.blit(titleTextSurf, titleTextRect)
-
-    typTextSurf, typTextRect = makeTextObjs('Press key to continue', Text, white)
-    typTextRect.center = (int(800/2),int(586/2) + 120)
-    screen.blit(typTextSurf, typTextRect)
     pygame.display.update()
 
-    while Activity() == None:
-        for event in pygame.event.get([QUIT]):
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-        pygame.display.update()
 
 def PointsCounter(text, textCol):
     Text = pygame.font.Font('freesansbold.ttf', 20)
@@ -193,7 +179,10 @@ def EdgeTest(NaughtyBirds,W,H,remover=[]):
         try:
             NaughtyBirds.remove(j)
             if NaughtyBirds == []:
-                msgSurface('Game over', red)                
+                Game_over()
+
+
+                
         except: continue
     del remover
     return NaughtyBirds
@@ -234,7 +223,7 @@ birds = []
 """for i in range(3):
     a = Bird(random.choice([bird1,bird2,bird3,bird4]), random.choice([10,50,150]), random.choice([100,300,500]), bird_speed, "W")
     birds.append(a)"""
-
+bird_speed = random.randint(3,5)
 def ObjPosition(ObjAmount, NotOffLimitsArea,pictures,OffLimits =[]):#NotOffLimitsArea =[[xmin,xmax],[ymin,ymax]]
     ##Sobiv ala tuleb arvestada pildi suurusega
     global birds
@@ -253,6 +242,7 @@ def ObjPosition(ObjAmount, NotOffLimitsArea,pictures,OffLimits =[]):#NotOffLimit
                 if R.colliderect(L):
                     continue
         break
+    
     if x < 50:
         if y<100:
             BirdDirection = "S"
@@ -276,10 +266,10 @@ def ObjPosition(ObjAmount, NotOffLimitsArea,pictures,OffLimits =[]):#NotOffLimit
         else:
             BirdDirection = random.choice(["W","N"])
     
-    bird_speed = random.randint(3,5)
     print(3)
     ### Linnu loomine
     picture = random.choice(pictures)
+    global bird_speed
     print(picture,x,y,bird_speed,BirdDirection)
     birds.append(Bird(picture,x,y,bird_speed,BirdDirection))
     OffLimits.append(R)
@@ -339,9 +329,12 @@ def game_loop():
                 birds.remove(element)
                 ObjPosition(1,[[1,799],[1,585]],[bird1,bird2,bird3,bird4],[s])
                 counter += 1
+                global bird_speed
+                bird_speed += 3
                 timeCounter = 13
             if birds == []:
                 msgSurface('Game over', red)
+                Game_over()
                 
         if timeCounter > 5:
             TimeCounter(timeCounter, white)
@@ -349,6 +342,7 @@ def game_loop():
             TimeCounter(timeCounter, red)
         if timeCounter <= 0:
             msgSurface('Game over', red)
+            Game_over()
             
         PointsCounter(counter, white)
 

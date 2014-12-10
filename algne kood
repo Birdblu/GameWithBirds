@@ -288,7 +288,7 @@ FPS = 60
 bird_checker = []
 
 def game_loop():
-    ObjPosition(3,[[1,699],[1,500]],[bird1,bird2,bird3,bird4],[s])#3 bird, s-nest
+    ObjPosition(3,[[100,599],[100,500]],[bird1,bird2,bird3,bird4],[s])#3 bird, s-nest
     getcontext().prec = 3
     timeCounter = 15
     k = pygame
@@ -334,7 +334,7 @@ def game_loop():
            
             if s.pos.colliderect(element.pos):
                 birds.remove(element)
-                ObjPosition(1,[[60,599],[60,500]],[bird1,bird2,bird3,bird4],[s])
+                ObjPosition(1,[[100,599],[100,500]],[bird1,bird2,bird3,bird4],[s])
                 counter += 1
                 global bird_speed
                 bird_speed += 3
@@ -353,7 +353,7 @@ def game_loop():
             
         PointsCounter(counter, white)
 
-        birds = EdgeTest(birds,801,587)
+        birds = EdgeTest(birds,800,575)
         sprites.update()
         pygame.display.update()
         clock.tick(FPS)

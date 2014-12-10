@@ -117,7 +117,7 @@ class Hunter(pygame.sprite.Sprite):
         if self.rect.left < self.area.left or self.rect.right > self.area.right:
             self.move = -self.move
             if self.rect.y >= 486:
-                pos = self.rect.move((self.move, -20))
+                pos = sef.rect.move((self.move, -20))
             elif self.rect.y <= 100:
                 pos = self.rect.move((self.move, 20))
             else:
@@ -285,8 +285,10 @@ def ObjPosition(ObjAmount, NotOffLimitsArea,pictures,OffLimits =[]):#NotOffLimit
 clock = pygame.time.Clock()
 FPS = 60
 
+bird_checker = []
+
 def game_loop():
-    ObjPosition(3,[[1,799],[1,585]],[bird1,bird2,bird3,bird4],[s])#3 bird, s-nest
+    ObjPosition(3,[[1,699],[1,500]],[bird1,bird2,bird3,bird4],[s])#3 bird, s-nest
     getcontext().prec = 3
     timeCounter = 15
     k = pygame
@@ -326,12 +328,13 @@ def game_loop():
                 if not FirstTree.pos.colliderect(element.pos):
                     if not SecondTree.pos.colliderect(element.pos):
                         if not ThirdTree.pos.colliderect(element.pos):
-                            birds.remove(element)
-                            got_shot.play()
+                            if timeCounter < 11:
+                                birds.remove(element)
+                                got_shot.play()
            
             if s.pos.colliderect(element.pos):
                 birds.remove(element)
-                ObjPosition(1,[[1,799],[1,585]],[bird1,bird2,bird3,bird4],[s])
+                ObjPosition(1,[[60,599],[60,500]],[bird1,bird2,bird3,bird4],[s])
                 counter += 1
                 global bird_speed
                 bird_speed += 3

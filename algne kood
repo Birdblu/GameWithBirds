@@ -228,9 +228,9 @@ birds = []
     birds.append(a)"""
 bird_speed = random.randint(3,5)
 def ObjPosition(ObjAmount, NotOffLimitsArea,pictures,OffLimits =[]):#NotOffLimitsArea =[[xmin,xmax],[ymin,ymax]]
-    ##Sobiv ala tuleb arvestada pildi suurusega
+    ##Allowed area
     global birds
-    ### x ja y paigutus
+    ### x and y positioning
     while ObjAmount>0:
         x = random.randint(NotOffLimitsArea[0][0],NotOffLimitsArea[0][1])
         y = random.randint(NotOffLimitsArea[1][0],NotOffLimitsArea[1][1])
@@ -269,11 +269,9 @@ def ObjPosition(ObjAmount, NotOffLimitsArea,pictures,OffLimits =[]):#NotOffLimit
         else:
             BirdDirection = random.choice(["W","N"])
     
-    print(3)
-    ### Linnu loomine
+    ### Bird generating
     picture = random.choice(pictures)
     global bird_speed
-    print(picture,x,y,bird_speed,BirdDirection)
     birds.append(Bird(picture,x,y,bird_speed,BirdDirection))
     OffLimits.append(R)
     if ObjAmount >1:
@@ -288,7 +286,7 @@ FPS = 60
 bird_checker = []
 
 def game_loop():
-    ObjPosition(3,[[100,599],[100,500]],[bird1,bird2,bird3,bird4],[s])#3 bird, s-nest
+    ObjPosition(3,[[100,599],[100,500]],[bird1,bird2,bird3,bird4],[s, hunter.rect])#3 bird, s-nest
     getcontext().prec = 3
     timeCounter = 15
     k = pygame
@@ -334,7 +332,7 @@ def game_loop():
            
             if s.pos.colliderect(element.pos):
                 birds.remove(element)
-                ObjPosition(1,[[100,599],[100,500]],[bird1,bird2,bird3,bird4],[s])
+                ObjPosition(1,[[100,599],[100,500]],[bird1,bird2,bird3,bird4],[s,hunter.rect])
                 counter += 1
                 global bird_speed
                 bird_speed += 3

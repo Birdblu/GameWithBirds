@@ -159,17 +159,17 @@ class Bird:
             self.image = bird4
     
     def move(self):
-        if self.direction =="E":# and self.pos.right<800:
+        if self.direction =="E":
             self.pos = self.pos.move(self.speed,0)
             self.x += self.speed
-        if self.direction =="N":# and self.pos.right<800:
+        if self.direction =="N":
             self.pos = self.pos.move(0,-self.speed)
             self.y -= self.speed
-        if self.direction =="S":# and self.pos.right<800:
+        if self.direction =="S":
             self.pos = self.pos.move(0,self.speed)
             self.y +=self.speed
         if self.direction =="W":# and self.pos.left>0:
-            self.pos = self.pos.move(-1*self.speed,0)
+            self.pos = self.pos.move(-self.speed,0)
             self.x -= self.speed
 
 def EdgeTest(NaughtyBirds,W,H,remover=[]):
@@ -183,52 +183,37 @@ def EdgeTest(NaughtyBirds,W,H,remover=[]):
             NaughtyBirds.remove(j)
             if NaughtyBirds == []:
                 Game_over()
-
-
-                
         except: continue
     remover[:] = []
     return NaughtyBirds
     
-#bird_speed = 3 #bird speed
-
 screen = pygame.display.set_mode( (800, 586) )
 pygame.display.set_caption("Bird Game")
 transColor = pygame.Color(255, 255, 255)
-bird1 = pygame.image.load("bird.png")#.convert()
-#bird1.set_colorkey(transColor)
-bird2 = pygame.image.load("bird2.png")#.convert()
-#bird2.set_colorkey(transColor)
-bird3 = pygame.image.load("bird3.png")#.convert()
-#bird3.set_colorkey(transColor)
-bird4 = pygame.image.load("bird4.png")#.convert()
-#bird4.set_colorkey(transColor)
-background = pygame.image.load("background.jpg")#.convert()
+bird1 = pygame.image.load("bird.png")
+bird2 = pygame.image.load("bird2.png")
+bird3 = pygame.image.load("bird3.png")
+bird4 = pygame.image.load("bird4.png")
+background = pygame.image.load("background.jpg")
 screen.blit(background, (0, 0))
-nest = pygame.image.load('nest.png')#.convert()
-#nest.set_colorkey(transColor)
-tree1 = pygame.image.load("tree1.png")#.convert()
-#tree1.set_colorkey(transColor)
-tree2 = pygame.image.load("tree2.png")#.convert()
-#tree2.set_colorkey(transColor)
-tree3 = pygame.image.load("tree3.png")#.convert()
-#tree3.set_colorkey(transColor)
+nest = pygame.image.load('nest.png')
+tree1 = pygame.image.load("tree1.png")
+tree2 = pygame.image.load("tree2.png")
+tree3 = pygame.image.load("tree3.png")
 
 FirstTree = Tree(tree1, 500,120)
 SecondTree = Tree(tree2, 70,120)
 ThirdTree = Tree(tree3, 300,325)
+
 s = Nest(nest, 550,140)
 hunter = Hunter()
 sprites = pygame.sprite.Group(hunter)
 
 birds = []
-###
-"""for i in range(3):
-    a = Bird(random.choice([bird1,bird2,bird3,bird4]), random.choice([10,50,150]), random.choice([100,300,500]), bird_speed, "W")
-    birds.append(a)"""
+
 bird_speed = random.randint(3,5)
+
 def ObjPosition(ObjAmount, NotOffLimitsArea,pictures,OffLimits =[]):#NotOffLimitsArea =[[xmin,xmax],[ymin,ymax]]
-    ##Allowed area
     global birds
     ### x and y positioning
     while ObjAmount>0:
@@ -277,12 +262,11 @@ def ObjPosition(ObjAmount, NotOffLimitsArea,pictures,OffLimits =[]):#NotOffLimit
     if ObjAmount >1:
         ObjPosition(ObjAmount-1,NotOffLimitsArea,pictures,OffLimits)
     del OffLimits, NotOffLimitsArea
-####
+
 
 
 clock = pygame.time.Clock()
 FPS = 60
-
 bird_checker = []
 
 def game_loop():
@@ -310,7 +294,7 @@ def game_loop():
         hunter.movement()
         timeCounter = Decimal(timeCounter - Decimal(1/10))
                 
-        screen.blit(background, (0, 0)) #Tähtis
+        screen.blit(background, (0, 0))
         sprites.draw(screen)
         screen.blit(FirstTree.image, FirstTree.pos)
         screen.blit(SecondTree.image, SecondTree.pos)
